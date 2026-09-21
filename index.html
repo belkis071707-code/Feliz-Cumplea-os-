@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Feliz Cumpleaños!</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(circle at center, #1b1b3a 0%, #05050f 100%);
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Fondo de estrellas */
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background-image: 
+                radial-gradient(white, rgba(255,255,255,.3) 2px, transparent 3px),
+                radial-gradient(white, rgba(255,255,255,.2) 1px, transparent 2px);
+            background-size: 350px 350px, 180px 180px;
+            z-index: 1;
+        }
+
+        /* Contenedor central del regalo y órbitas giratorias */
+        #main-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        /* El regalo central interactivo */
+        #gift-box {
+            position: absolute;
+            font-size: 6rem;
+            cursor: pointer;
+            z-index: 30;
+            animation: bounceGift 2s infinite ease-in-out;
+            filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.7));
+            transition: transform 0.3s ease;
+        }
+
+        #gift-box:hover {
+            transform: scale(1.1);
+        }
+
+        @keyframes bounceGift {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        /* Órbitas giratorias con tus frases */
+        .orbit-ring {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Diferentes tamaños y velocidades de giro */
+        .ring-1 { width: 320px; height: 320px; animation: spinClockwise 22s linear infinite; }
+        .ring-2 { width: 480px; height: 480px; animation: spinCounterClockwise 28s linear infinite; }
+        .ring-3 { width: 640px; height: 640px; animation: spinClockwise 35s linear infinite; }
+
+        @keyframes spinClockwise {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes spinCounterClockwise {
+            0% { transform: rotate(360deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        /* Frases distribuidas en las órbitas */
+        .phrase-item {
+            position: absolute;
+            background: rgba(20, 20, 40, 0.75);
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            color: #ffd700;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+            pointer-events: none;
+            /* Contrarresta el giro para que el texto siempre se lea derecho */
+            animation: inherit;
+            animation-direction: reverse; 
+        }
+
+        /* Posicionamiento en el círculo */
+        .p1 { top: 0; left: 50%; transform: translate(-50%, -50%); }
+        .p2 { bottom: 0; left: 50%; transform: translate(-50%, 50%); }
+        .p3 { left: 0; top: 50%; transform: translate(-50%, -50%); }
+        .p4 { right: 0; top: 50%; transform: translate(50%, -50%); }
+        .p5 { top: 15%; right: 15%; }
+        .p6 { bottom: 15%; left: 15%; }
+
+        /* Elementos decorativos extra de cumpleaños girando */
+        .deco-item {
+            position: absolute;
+            font-size: 1.8rem;
+            animation: inherit;
+            animation-direction: reverse;
+        }
+
+        /* --- TARJETA FINAL DE FELICITACIÓN --- */
+        #birthday-card {
+            position: absolute;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            z-index: 50;
+            background: rgba(15, 15, 30, 0.92);
+            padding: 35px;
+            border-radius: 25px;
+            border: 2px solid #ffd700;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
+            max-width: 75%;
+            animation: showCard 1s ease forwards;
+        }
+
+        @keyframes showCard {
+            0% { opacity: 0; transform: scale(0.5); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        #birthday-card h1 {
+            color: #ffd700;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+        }
+
+        #birthday-card p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #ffffff;
+        }
+
+        /* Botón inferior */
+        .copy-btn {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #ffffff;
+            border: none;
+            padding: 12px 26px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="stars"></div>
+
+    <div id="main-container">
+        <!-- Órbita 1 -->
+        <div class="orbit-ring ring-1">
+            <div class="phrase-item p1">✨ Que nunca te falten motivos para sonreír</div>
+            <div class="phrase-item p2">🎂 Feliz cumpleaños que la pases bien en tu dia.</div>
+            <div class="deco-item" style="top: 80%; right: 20%;">🎈</div>
+        </div>
+
+        <!-- Órbita 2 -->
+        <div class="orbit-ring ring-2">
+            <div class="phrase-item p3">💖 Brindo por tu felicidad y tus sueños</div>
+            <div class="phrase-item p4">🌟 Que la vida te abrace bonito hoy y siempre</div>
+            <div class="deco-item" style="top: 10%; left: 20%;">🎉</div>
+            <div class="deco-item" style="bottom: 10%; right: 10%;">🧁</div>
+        </div>
+
+        <!-- Órbita 3 -->
+        <div class="orbit-ring ring-3">
+            <div class="phrase-item p5">🎉 Hoy el mundo es un poco más especial</div>
+            <div class="phrase-item p6">🎁 Por cada momento compartido, ¡felicidades!</div>
+            <div class="deco-item" style="top: 30%; left: 5%;">⭐</div>
+        </div>
+
+        <!-- Regalo central que activa la música y la tarjeta -->
+        <div id="gift-box" onclick="abrirSorpresa()">🎁</div>
+    </div>
+
+    <!-- Tarjeta que aparece al abrir -->
+    <div id="birthday-card">
+        <h1>¡Feliz Cumpleaños! 🎉</h1>
+        <p>Brindo por tu felicidad, por tus sueños y por cada momento compartido. Que la vida te sorprenda hoy y siempre. ¡Que pases un día maravilloso lleno de amor y alegría! 🎂✨</p>
+    </div>
+
+    <button class="copy-btn" onclick="copiarEnlace()">Copiar enlace para WhatsApp</button>
+
+    <script>
+        let audioCtx = null;
+
+        function reproducirMusica() {
+            try {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Notas originales de Happy Birthday completas y con su ritmo exacto
+                const G4 = 392.00, A4 = 440.00, C5 = 523.25, B4 = 493.88, E5 = 659.25, D5 = 587.33, F5 = 698.46;
+
+                const melodia = [
+                    // Happy birthday to you
+                    { nota: G4, duracion: 0.25 }, { nota: G4, duracion: 0.25 },
+                    { nota: A4, duracion: 0.5 },  { nota: G4, duracion: 0.5 },
+                    { nota: C5, duracion: 0.5 },  { nota: B4, duracion: 1.0 },
+                    
+                    // Happy birthday to you
+                    { nota: G4, duracion: 0.25 }, { nota: G4, duracion: 0.25 },
+                    { nota: A4, duracion: 0.5 },  { nota: G4, duracion: 0.5 },
+                    { nota: D5, duracion: 0.5 },  { nota: C5, duracion: 1.0 },
+                    
+                    // Happy birthday dear [Name]
+                    { nota: G4, duracion: 0.25 }, { nota: G4, duracion: 0.25 },
+                    { nota: E5, duracion: 0.5 },  { nota: C5, duracion: 0.5 },
+                    { nota: B4, duracion: 0.5 },  { nota: A4, duracion: 1.0 },
+                    
+                    // Happy birthday to you
+                    { nota: F5, duracion: 0.25 }, { nota: F5, duracion: 0.25 },
+                    { nota: E5, duracion: 0.5 },  { nota: C5, duracion: 0.5 },
+                    { nota: D5, duracion: 0.5 },  { nota: C5, duracion: 1.0 }
+                ];
+
+                let tiempoActual = audioCtx.currentTime;
+
+                melodia.forEach(item => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(item.nota, tiempoActual);
+                    
+                    gain.gain.setValueAtTime(0.18, tiempoActual);
+                    gain.gain.exponentialRampToValueAtTime(0.001, tiempoActual + item.duracion * 0.9);
+                    
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    
+                    osc.start(tiempoActual);
+                    osc.stop(tiempoActual + item.duracion);
+                    
+                    tiempoActual += item.duracion;
+                });
+            } catch(e) {
+                console.log("Audio no disponible automáticamente");
+            }
+        }
+
+        function abrirSorpresa() {
+            // Ocultar regalo y órbitas
+            const container = document.getElementById('main-container');
+            container.style.transition = 'all 0.5s ease';
+            container.style.transform = 'scale(1.5)';
+            container.style.opacity = '0';
+            setTimeout(() => {
+                container.style.display = 'none';
+            }, 500);
+
+            // Mostrar tarjeta de felicitación
+            const card = document.getElementById('birthday-card');
+            card.style.display = 'flex';
+
+            // Reproducir música
+            reproducirMusica();
+        }
+
+        function copiarEnlace() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.innerText = '¡Enlace copiado! ✨';
+                setTimeout(() => { btn.innerText = 'Copiar enlace para WhatsApp'; }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
