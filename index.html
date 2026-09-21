@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Feliz Cumpleaños!</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0b0f19; /* Fondo azul oscuro */
+            color: #ffffff; /* Texto blanco */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            text-align: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            cursor: crosshair;
+        }
+
+        /* Estilo del título principal */
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 223, 0, 0.8); /* Brillo dorado */
+            animation: pulse 2s infinite;
+        }
+
+        /* Estilo del mensaje */
+        p {
+            font-size: 1.5rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+            z-index: 10;
+        }
+
+        /* Animación de pulso para el título */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Fondo de estrellas (generado con CSS) */
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background-image: 
+                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
+                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px),
+                radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 3px);
+            background-size: 550px 550px, 350px 350px, 250px 250px;
+            background-position: 0 0, 40px 60px, 130px 270px;
+            z-index: 1;
+        }
+
+        /* Estilo para el confeti (partículas) */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 1;
+            z-index: 5;
+        }
+
+        /* Botón para copiar enlace (opcional, para el usuario) */
+        .copy-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #34d399; /* Verde menta */
+            color: #0b0f19;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s;
+            z-index: 100;
+        }
+        .copy-btn:hover {
+            background-color: #059669;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="stars"></div>
+
+    <div class="container">
+        <h1>¡Feliz Cumpleaños!</h1>
+        <p>¡Que este día esté lleno de alegría, sorpresas y mucha magia! 🎉 Disfruta cada momento y que todos tus deseos se cumplan.</p>
+    </div>
+
+    <!-- Botón para copiar el enlace, se muestra solo en la vista final -->
+    <button class="copy-btn" onclick="copiarEnlace()">Copiar enlace para WhatsApp</button>
+
+    <script>
+        // --- Lógica para el confeti ---
+        document.body.addEventListener('click', function(e) {
+            lanzarConfeti(e.clientX, e.clientY);
+        });
+
+        function lanzarConfeti(x, y) {
+            const colores = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500', '#ffc0cb'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confeti = document.createElement('div');
+                confeti.classList.add('confetti');
+                
+                // Propiedades aleatorias para cada pieza de confeti
+                const color = colores[Math.floor(Math.random() * colores.length)];
+                confeti.style.backgroundColor = color;
+                confeti.style.left = x + 'px';
+                confeti.style.top = y + 'px';
+                
+                // Forma aleatoria (cuadrado o círculo)
+                if(Math.random() > 0.5) {
+                    confeti.style.borderRadius = '50%'; // Círculo
+                }
+
+                document.body.appendChild(confeti);
+
+                // Física del movimiento
+                const destinoX = x + (Math.random() - 0.5) * 300; // Distancia horizontal
+                const destinoY = y + Math.random() * 300 + 50;   // Distancia vertical (hacia abajo)
+                const duracion = Math.random() * 1500 + 1500;    // Tiempo en ms
+                const rotacion = Math.random() * 720;            // Grados de giro
+                
+                confeti.animate([
+                    { transform: `translate(0, 0) rotate(0deg)`, opacity: 1 },
+                    { transform: `translate(${destinoX - x}px, ${destinoY - y}px) rotate(${rotacion}deg)`, opacity: 0 }
+                ], {
+                    duration: duracion,
+                    easing: 'cubic-bezier(0.25, 0.1, 0.25, 1)',
+                    fill: 'forwards'
+                });
+
+                // Eliminar el elemento del DOM después de la animación
+                setTimeout(() => {
+                    confeti.remove();
+                }, duracion);
+            }
+        }
+
+        // --- Función para copiar el enlace de la página ---
+        function copiarEnlace() {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.innerText = '¡Enlace copiado!';
+                btn.style.backgroundColor = '#fbbf24'; // Ámbar para indicar éxito
+                setTimeout(() => {
+                    btn.innerText = 'Copiar enlace para WhatsApp';
+                    btn.style.backgroundColor = '#34d399';
+                }, 2000);
+            }).catch(err => {
+                console.error('Error al copiar: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
